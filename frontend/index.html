@@ -450,49 +450,143 @@
 
     <!-- Footer -->
     <footer class="footer" id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>SnapIt Analytics</h3>
-                    <p>Professional website analytics that costs 70% less than competitors. Get real-time insights, conversion tracking, and advanced features starting free.</p>
-                </div>
-                
+        <div class="footer-container">
+            <div class="footer-grid">
                 <div class="footer-column">
-                    <h4>Product</h4>
-                    <ul>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="/testing.html">API Documentation</a></li>
-                        <li><a href="https://status.snapitanalytics.com" target="_blank">Status Page</a></li>
+                    <h4 class="footer-heading">SNAPIT SUITE</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://snapitsoftware.com" target="_blank">SnapIT Software</a></li>
+                        <li><a href="https://snapitforms.com" target="_blank">SnapIT Forms</a></li>
+                        <li><a href="https://snapitanalytics.com" class="current-page">SnapIT Analytics</a></li>
+                        <li><a href="https://snapitagent.com" target="_blank">SnapIT Agent</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#contact">About</a></li>
-                        <li><a href="/privacy.html">Privacy Policy</a></li>
-                        <li><a href="/terms.html">Terms of Service</a></li>
+                    <h4 class="footer-heading">TOOLS & UTILITIES</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://burn.snapitsoftware.com" target="_blank">SnapIT Burn</a></li>
+                        <li><a href="https://polls.snapitsoftware.com" target="_blank">SnapIT Polls</a></li>
+                        <li><a href="https://snapitqr.com" target="_blank">SnapIT QR</a></li>
+                        <li><a href="https://snapiturl.com" target="_blank">SnapIT URL</a></li>
+                        <li><a href="https://urlstatuschecker.com" target="_blank">URL Status Checker</a></li>
+                        <li><a href="https://statuscodecheck.com" target="_blank">Status Code Check</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
-                    <h4>Contact Us</h4>
-                    <form action="https://dnxslxuth3.execute-api.us-east-1.amazonaws.com/production/submit" method="POST" class="contact-form">
-                        <input type="hidden" name="access_key" value="sa_ac6e0311d49b41f88f049692239e80f6">
-                        <input type="text" name="name" placeholder="Your Name" required class="contact-input" autocomplete="name">
-                        <input type="email" name="email" placeholder="Your Email" required class="contact-input" autocomplete="email">
-                        <textarea name="message" placeholder="Your Message" required class="contact-textarea" rows="3"></textarea>
-                        <button type="submit" class="contact-submit">Send Message</button>
-                    </form>
+                    <h4 class="footer-heading">RESOURCES</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://pdf.snapitsoftware.com" target="_blank">PDF Tools</a></li>
+                        <li><a href="/docs" target="_blank">API Documentation</a></li>
+                        <li><a href="https://forum.snapitsoftware.com" target="_blank">SnapIT Forum</a></li>
+                        <li><a href="https://forums.snapitsoftware.com" target="_blank">Community Forums</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="footer-heading">LEGAL & SUPPORT</h4>
+                    <ul class="footer-links">
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="#contact">Send Feedback</a></li>
+                    </ul>
+                    <p class="footer-description">
+                        Secure, self-destructing file sharing. Files automatically delete after viewing.
+                    </p>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
-                <p>&copy; 2025 SnapIt Analytics. All rights reserved.</p>
+                <p>&copy; 2025 SnapIT Software. All rights reserved.</p>
             </div>
         </div>
     </footer>
+
+    <style>
+        /* Footer Styling */
+        .footer {
+            background: #000000;
+            color: #ffffff;
+            padding: 3rem 0 1.5rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-heading {
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ec4899;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ec4899;
+        }
+
+        .footer-links a.current-page {
+            color: #ec4899;
+            font-weight: 500;
+        }
+
+        .footer-description {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-top: 1.5rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333333;
+            padding-top: 1.5rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
 
     <!-- Notification -->
     <div class="notification" id="notification"></div>
