@@ -548,3 +548,86 @@ function aggregateAnalytics(events) {
 
   return analytics;
 }
+
+/**
+ * Get heatmap data for a project
+ */
+exports.getHeatmap = async (event) => {
+  try {
+    const userId = event.requestContext.authorizer.userId;
+    const projectId = event.queryStringParameters?.projectId;
+    const url = event.queryStringParameters?.url;
+
+    if (!projectId) {
+      return response.error('Project ID is required', 400);
+    }
+
+    // Verify project ownership
+    const project = await dynamodb.get({
+      TableName: process.env.PROJECTS_TABLE,
+      Key: { projectId }
+    }).promise();
+
+    if (!project.Item) {
+      return response.error('Project not found', 404);
+    }
+
+    if (project.Item.userId !== userId) {
+      return response.error('Unauthorized', 403);
+    }
+
+    // Get click events from last 30 days
+    const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+
+    const events = await dynamodb.query({
+      TableName: process.env.EVENTS_TABLE,
+      IndexName: 'ProjectIdTimestampIndex',
+      KeyConditionExpression: 'projectId = :projectId AND #ts >= :startTime',
+      FilterExpression: '#evt = :clickEvent',
+      ExpressionAttributeNames: {
+        '#ts': 'timestamp',
+        '#evt': 'event'
+      },
+      ExpressionAttributeValues: {
+        ':projectId': projectId,
+        ':startTime': thirtyDaysAgo,
+        ':clickEvent': 'click'
+      },
+      Limit: 5000
+    }).promise();
+
+    // Filter by URL if specified
+    let clickData = events.Items || [];
+    if (url) {
+      clickData = clickData.filter(e => e.url === url);
+    }
+
+    // Extract heatmap coordinates
+    const heatmapData = clickData
+      .filter(e => e.properties?.clickX && e.properties?.clickY)
+      .map(e => ({
+        x: e.properties.clickX,
+        y: e.properties.clickY,
+        element: e.properties.element,
+        elementPath: e.properties.elementPath,
+        url: e.url,
+        timestamp: e.timestamp
+      }));
+
+    return response.success({
+      projectId,
+      url,
+      clickCount: heatmapData.length,
+      heatmapData: heatmapData.slice(0, 2000), // Limit for performance
+      dateRange: {
+        start: thirtyDaysAgo,
+        end: Date.now()
+      }
+    });
+
+  } catch (error) {
+    console.error('Get heatmap error:', error);
+    return response.error(error.message, 500);
+  }
+};
+

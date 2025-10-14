@@ -134,6 +134,43 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
 
+  getHeatmap:
+    handler: handlers/analytics.getHeatmap
+    events:
+      - http:
+          path: /analytics/heatmap
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  # Monitoring & Real-time
+  getDashboard:
+    handler: handlers/monitoring.getDashboard
+    events:
+      - http:
+          path: /monitoring/dashboard
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  stream:
+    handler: handlers/monitoring.stream
+    events:
+      - http:
+          path: /stream
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
   # Projects
   createProject:
     handler: handlers/projects.createProject
