@@ -64,12 +64,14 @@
     <!-- Enhanced Features -->
     <script src="/js/onboarding.js" defer></script>
     
-    <!-- SnapIt Analytics Tracking (Dogfooding) -->
+    <!-- SnapIt Analytics Tracking (Dogfooding) - Disabled until real tracking codes exist -->
+    <!--
     <script>
         window.SNAPIT_TRACKING_ID = 'SA_snapitanalytics_production';
         window.SNAPIT_DEBUG = false;
     </script>
     <script src="/analytics.js" defer></script>
+    -->
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
@@ -290,7 +292,18 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            background: #FFFFFF !important;
+        }
+
+        .hero .hero-title,
+        .hero .hero-subtitle,
+        .hero .value-prop,
+        .hero .cta-text {
+            color: #1F2937 !important;
+        }
+
+        .hero .value-prop i {
+            color: #2563eb !important;
         }
 
         .features {

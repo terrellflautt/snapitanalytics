@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - SnapIt Analytics</title>
+    
+    <!-- Cross-Origin Policies for Google OAuth -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="unsafe-none">
+
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://accounts.google.com https://www.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://cdn.jsdelivr.net https://accounts.google.com https://www.googleapis.com https://api.snapitanalytics.com https://*.execute-api.us-east-1.amazonaws.com wss://*.execute-api.us-east-1.amazonaws.com; frame-src https://accounts.google.com;">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="/css/analytics-styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/components.css">
+    
+    <!-- Enhanced Features -->
+    <script src="/js/realtime-dashboard.js" defer></script>
+    <script src="/js/advanced-analytics.js" defer></script>
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar-nav i {
+            width: 20px;
+            margin-right: 1rem;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            background: var(--gradient-background);
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-gray);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, var(--primary-blue), #3b82f6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stat-icon.pageviews { background: var(--primary-blue); }
+        .stat-icon.visitors { background: #3b82f6; }
+        .stat-icon.sessions { background: #10b981; }
+        .stat-icon.conversion { background: #f59e0b; }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-text);
+            font-size: 0.875rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .stat-change.positive {
+            color: #10b981;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        .chart-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-gray);
+            transition: all 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+        }
+
+        .websites-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-gray);
+            margin-bottom: 2rem;
+        }
+
+        .website-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .website-item:last-child {
+            border-bottom: none;
+        }
+
+        .website-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .website-url {
+            color: var(--gray-text);
+            font-size: 0.875rem;
+        }
+
+        .website-stats {
+            text-align: right;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark-text);
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-text);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .tracking-code {
+            background: #f8fafc;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            color: #1f2937;
+            line-height: 1.5;
+            max-width: 100%;
+            word-break: break-all;
+        }
+        
+        .tracking-code-result {
+            display: none;
+            margin-top: 1.5rem;
+        }
+        
+        .tracking-code-result h4 {
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+        
+        .copy-btn-tracking {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>SnapIt Analytics</h2>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#overview" class="nav-link active"><i class="fas fa-chart-line"></i> Overview</a></li>
+                <li><a href="#websites" class="nav-link"><i class="fas fa-globe"></i> Websites</a></li>
+                <li><a href="#events" class="nav-link"><i class="fas fa-mouse-pointer"></i> Events</a></li>
+                <li><a href="#realtime" class="nav-link"><i class="fas fa-eye"></i> Real-time</a></li>
+                <li><a href="#settings" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Analytics Dashboard</h1>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div>
+                        <div id="userName">Loading...</div>
+                        <div class="user-plan-text" id="userPlan">Free Plan</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="content-overview" class="content-section">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="pageViewsCount">0</div>
+                                <div class="stat-label">Page Views</div>
+                                <div class="stat-change positive" id="pageViewsChange">+0%</div>
+                            </div>
+                            <div class="stat-icon pageviews">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="visitorsCount">0</div>
+                                <div class="stat-label">Unique Visitors</div>
+                                <div class="stat-change positive" id="visitorsChange">+0%</div>
+                            </div>
+                            <div class="stat-icon visitors">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="sessionsCount">0</div>
+                                <div class="stat-label">Sessions</div>
+                                <div class="stat-change positive" id="sessionsChange">+0%</div>
+                            </div>
+                            <div class="stat-icon sessions">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value" id="conversionRate">0%</div>
+                                <div class="stat-label">Conversion Rate</div>
+                                <div class="stat-change positive" id="conversionChange">+0%</div>
+                            </div>
+                            <div class="stat-icon conversion">
+                                <i class="fas fa-funnel-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <h3 class="chart-title">Traffic Overview</h3>
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Top Pages</h3>
+                        <div id="topPages">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Websites Section -->
+            <div id="content-websites" class="content-section" style="display: none;">
+                <div class="websites-section">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Your Websites</h3>
+                        <button class="btn btn-primary" onclick="showAddWebsiteModal()">
+                            <i class="fas fa-plus"></i> Add Website
+                        </button>
+                    </div>
+                    <div id="websitesList">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Section -->
+            <div id="content-events" class="content-section" style="display: none;">
+                <div class="chart-card">
+                    <h3 class="chart-title">Event Tracking</h3>
+                    <p style="color: var(--gray-text); text-align: center; padding: 2rem;">
+                        <i class="fas fa-mouse-pointer" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i><br>
+                        Event tracking data will appear here once you have events tracked on your websites.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Real-time Section -->
+            <div id="content-realtime" class="content-section" style="display: none;">
+                <div class="chart-card">
+                    <h3 class="chart-title">Real-time Analytics</h3>
+                    <div id="realtimeData">
+                        <p style="color: var(--gray-text); text-align: center; padding: 2rem;">
+                            <i class="fas fa-eye" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i><br>
+                            Real-time visitor data will appear here.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="content-settings" class="content-section" style="display: none;">
+                <div class="websites-section">
+                    <h3 class="chart-title">Account Settings</h3>
+                    
+                    <div style="background: rgba(255, 193, 7, 0.1); border: 1px solid #ffc107; border-radius: 8px; padding: 1rem; margin-bottom: 2rem;">
+                        <h4 style="color: #856404; margin: 0 0 0.5rem 0;">
+                            <i class="fas fa-flask"></i> Alpha Testing Phase
+                        </h4>
+                        <p style="color: #856404; margin: 0;">
+                            SnapIt Analytics is currently in alpha testing. We welcome your feedback to help us improve the platform.
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <div style="padding: 0.75rem; background: var(--light-gray); border-radius: 6px; font-weight: 500;">
+                            <span id="accountPlan">Free Plan</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <div style="padding: 0.75rem; background: var(--light-gray); border-radius: 6px; font-family: var(--font-mono);">
+                            <span id="userIdDisplay">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Feedback & Support</label>
+                        <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-gray);">
+                            <form action="https://dnxslxuth3.execute-api.us-east-1.amazonaws.com/production/submit" method="POST">
+                                <input type="hidden" name="access_key" value="sa_c0030f4d18c2476b823697a492f211ce">
+                                <label for="feedback-name" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Your Name</label>
+                                <input type="text" id="feedback-name" name="name" placeholder="Your Name" required autocomplete="name" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-gray); border-radius: 6px; margin-bottom: 1rem;">
+                                <label for="feedback-email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Your Email</label>
+                                <input type="email" id="feedback-email" name="email" placeholder="Your Email" required autocomplete="email" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-gray); border-radius: 6px; margin-bottom: 1rem;">
+                                <label for="feedback-message" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Message</label>
+                                <textarea id="feedback-message" name="message" placeholder="Your feedback, questions, or bug reports..." required rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-gray); border-radius: 6px; margin-bottom: 1rem; resize: vertical;"></textarea>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Send Feedback
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Website Modal -->
+    <div id="addWebsiteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideAddWebsiteModal()">&times;</span>
+            <h3>Add New Website</h3>
+            <form id="addWebsiteForm" onsubmit="addWebsite(event)">
+                <div class="form-group">
+                    <label for="websiteName">Website Name</label>
+                    <input type="text" id="websiteName" name="websiteName" required 
+                           placeholder="My Awesome Website" autocomplete="organization">
+                </div>
+                <div class="form-group">
+                    <label for="websiteDomain">Domain</label>
+                    <input type="url" id="websiteDomain" name="websiteDomain" required 
+                           placeholder="https://mywebsite.com" autocomplete="url">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideAddWebsiteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Website
+                    </button>
+                </div>
+            </form>
+            <div id="trackingCodeResult" class="tracking-code-result">
+                <h4>Your Tracking Code:</h4>
+                <div class="tracking-code" id="generatedTrackingCode"></div>
+                <button class="btn btn-primary copy-btn-tracking" onclick="copyTrackingCode()">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dashboard JavaScript
+        (function() {
+            'use strict';
+
+            const CONFIG = {
+                API_BASE_URL: 'https://api.snapitanalytics.com'
+            };
+
+            let currentUser = null;
+            let trafficChart = null;
+
+            // Initialize dashboard
+            async function init() {
+                await checkAuth();
+                if (currentUser) {
+                    loadDashboardData();
+                    initTrafficChart();
+                    
+                    // Initialize correct section based on URL hash
+                    const hash = window.location.hash.slice(1) || 'overview';
+                    showSection(hash);
+                }
+            }
+
+            // Check authentication
+            async function checkAuth() {
+                // Check for access key in URL parameters first
+                const urlParams = new URLSearchParams(window.location.search);
+                const accessKey = urlParams.get('key') || urlParams.get('access_key');
+                
+                if (accessKey) {
+                    try {
+                        // Authenticate using access key
+                        const response = await fetch(`${CONFIG.API_BASE_URL}/auth/verify-key`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ accessKey })
+                        });
+
+                        const data = await response.json();
+                        if (data.valid) {
+                            currentUser = data.user;
+                            updateUserInfo();
+                            return;
+                        }
+                    } catch (error) {
+                        console.error('Access key auth failed:', error);
+                    }
+                }
+
+                // Fall back to token authentication
+                const token = localStorage.getItem('accessToken');
+                if (!token) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/auth/verify`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    if (data.valid) {
+                        currentUser = data.user;
+                        updateUserInfo();
+                    } else {
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('refreshToken');
+                        window.location.href = '/';
+                    }
+                } catch (error) {
+                    console.error('Auth check failed:', error);
+                    window.location.href = '/';
+                }
+            }
+
+            // Update user info display
+            function updateUserInfo() {
+                if (currentUser) {
+                    document.getElementById('userName').textContent = currentUser.name;
+                    document.getElementById('userPlan').textContent = `${currentUser.plan.charAt(0).toUpperCase() + currentUser.plan.slice(1)} Plan`;
+                    document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+                    
+                    // Update settings page
+                    document.getElementById('accountPlan').textContent = `${currentUser.plan.charAt(0).toUpperCase() + currentUser.plan.slice(1)} Plan`;
+                    document.getElementById('userIdDisplay').textContent = currentUser.userId || 'Not assigned';
+                    
+                    // Update URL with user ID
+                    updateURLWithUserId();
+                }
+            }
+
+            // Update URL with user ID
+            function updateURLWithUserId() {
+                if (currentUser && currentUser.userId) {
+                    const url = new URL(window.location);
+                    url.searchParams.set('user', currentUser.userId);
+                    window.history.replaceState({}, '', url);
+                }
+            }
+
+            // Load dashboard data
+            async function loadDashboardData() {
+                await loadWebsites();
+                await loadAnalytics();
+            }
+
+            // Load websites
+            async function loadWebsites() {
+                const websitesList = document.getElementById('websitesList');
+                
+                if (!currentUser.websites || currentUser.websites.length === 0) {
+                    websitesList.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--gray-text);">
+                            <i class="fas fa-globe" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                            <p>No websites added yet.</p>
+                            <button class="btn btn-primary" onclick="showAddWebsiteModal()">Add Your First Website</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                websitesList.innerHTML = currentUser.websites.map(website => `
+                    <div class="website-item">
+                        <div class="website-info">
+                            <h4>${website.name}</h4>
+                            <div class="website-url">${website.domain}</div>
+                            <small style="color: var(--gray-text); font-family: var(--font-mono);">ID: ${website.trackingId}</small>
+                        </div>
+                        <div class="website-stats">
+                            <button class="btn btn-secondary" onclick="showAnalytics('${website.trackingId}')">
+                                <i class="fas fa-chart-bar"></i> View Analytics
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Load analytics data
+            async function loadAnalytics() {
+                if (!currentUser.trackingIds || currentUser.trackingIds.length === 0) {
+                    return;
+                }
+
+                // For now, use the first tracking ID
+                const trackingId = currentUser.trackingIds[0];
+                
+                try {
+                    const token = localStorage.getItem('accessToken');
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/analytics/${trackingId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        updateStats(data.analytics);
+                        updateTrafficChart(data.analytics);
+                        updateTopPages(data.analytics.topPages || []);
+                    }
+                } catch (error) {
+                    console.error('Error loading analytics:', error);
+                }
+            }
+
+            // Update stats display
+            function updateStats(analytics) {
+                document.getElementById('pageViewsCount').textContent = analytics.pageViews?.toLocaleString() || '0';
+                document.getElementById('visitorsCount').textContent = analytics.uniqueVisitors?.toLocaleString() || '0';
+                document.getElementById('sessionsCount').textContent = analytics.sessions?.toLocaleString() || '0';
+                document.getElementById('conversionRate').textContent = `${analytics.bounceRate || 0}%`;
+            }
+
+            // Initialize traffic chart
+            function initTrafficChart() {
+                const ctx = document.getElementById('trafficChart').getContext('2d');
+                trafficChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                        datasets: [{
+                            label: 'Page Views',
+                            data: Array.from({length: 24}, () => Math.floor(Math.random() * 100)),
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Update traffic chart
+            function updateTrafficChart(analytics) {
+                if (trafficChart && analytics.hourlyData) {
+                    trafficChart.data.datasets[0].data = analytics.hourlyData.map(h => h.pageViews);
+                    trafficChart.update();
+                }
+            }
+
+            // Update top pages
+            function updateTopPages(topPages) {
+                const container = document.getElementById('topPages');
+                if (!topPages || topPages.length === 0) {
+                    container.innerHTML = '<p style="color: var(--gray-text); text-align: center; padding: 2rem;">No data available</p>';
+                    return;
+                }
+
+                container.innerHTML = topPages.slice(0, 10).map(page => `
+                    <div class="top-pages-item">
+                        <div class="top-pages-path">${page.path}</div>
+                        <div class="top-pages-views">${page.views}</div>
+                    </div>
+                `).join('');
+            }
+
+            // Add website
+            window.addWebsite = async function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(event.target);
+                const websiteName = formData.get('websiteName');
+                const websiteDomain = formData.get('websiteDomain');
+
+                try {
+                    const token = localStorage.getItem('accessToken');
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/tracking/generate`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            websiteName,
+                            domain: websiteDomain
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        // Show tracking code
+                        document.getElementById('generatedTrackingCode').textContent = data.trackingCode;
+                        document.getElementById('trackingCodeResult').style.display = 'block';
+                        
+                        // Hide form
+                        document.getElementById('addWebsiteForm').style.display = 'none';
+                        
+                        // Refresh dashboard
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (error) {
+                    console.error('Error adding website:', error);
+                    alert('Failed to add website. Please try again.');
+                }
+            };
+
+            // Modal functions
+            window.showAddWebsiteModal = function() {
+                document.getElementById('addWebsiteModal').style.display = 'block';
+                document.getElementById('addWebsiteForm').style.display = 'block';
+                document.getElementById('trackingCodeResult').style.display = 'none';
+            };
+
+            window.hideAddWebsiteModal = function() {
+                document.getElementById('addWebsiteModal').style.display = 'none';
+                document.getElementById('addWebsiteForm').reset();
+            };
+
+            // Copy tracking code
+            window.copyTrackingCode = function() {
+                const code = document.getElementById('generatedTrackingCode').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    alert('Tracking code copied to clipboard!');
+                });
+            };
+
+            // Logout
+            window.logout = function() {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                window.location.href = '/';
+            };
+
+            // Show analytics for specific tracking ID
+            window.showAnalytics = async function(trackingId) {
+                console.log('Loading analytics for:', trackingId);
+                
+                try {
+                    const token = localStorage.getItem('accessToken');
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/analytics/${trackingId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Switch to overview section and update with specific data
+                        showSection('overview');
+                        
+                        if (data.analytics) {
+                            updateStats(data.analytics);
+                            updateTrafficChart(data.analytics);
+                            updateTopPages(data.analytics.topPages || []);
+                        }
+                        
+                        // Update title to show which site's analytics
+                        const website = currentUser.websites.find(w => w.trackingId === trackingId);
+                        if (website) {
+                            document.querySelector('.dashboard-title').textContent = `Analytics - ${website.name}`;
+                        }
+                    } else if (response.status === 404) {
+                        alert('No analytics data found for this website yet. Make sure the tracking code is installed and receiving traffic.');
+                    } else {
+                        console.error('Failed to load analytics:', response.status);
+                        alert('Failed to load analytics data. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error loading analytics:', error);
+                    alert('Error loading analytics data. Please check your connection.');
+                }
+            };
+
+            // Navigation functions
+            function showSection(sectionName) {
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show selected section
+                const targetSection = document.getElementById(`content-${sectionName}`);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                const activeLink = document.querySelector(`[href="#${sectionName}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+                
+                // Update URL hash
+                window.location.hash = sectionName;
+                
+                // Load section-specific data
+                if (sectionName === 'websites') {
+                    loadWebsites();
+                } else if (sectionName === 'realtime') {
+                    loadRealtimeData();
+                }
+            }
+
+            // Load real-time data
+            function loadRealtimeData() {
+                const realtimeData = document.getElementById('realtimeData');
+                realtimeData.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="stats-grid" style="max-width: 600px; margin: 0 auto;">
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <div>
+                                        <div class="stat-value">0</div>
+                                        <div class="stat-label">Active Visitors</div>
+                                    </div>
+                                    <div class="stat-icon" style="background: #10b981;">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <div>
+                                        <div class="stat-value">0</div>
+                                        <div class="stat-label">Page Views (Last Hour)</div>
+                                    </div>
+                                    <div class="stat-icon" style="background: #3b82f6;">
+                                        <i class="fas fa-eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="color: var(--gray-text); margin-top: 2rem;">
+                            Real-time data will populate once visitors start interacting with your tracked websites.
+                        </p>
+                    </div>
+                `;
+            }
+
+            // Handle browser back/forward
+            window.addEventListener('hashchange', function() {
+                const hash = window.location.hash.slice(1) || 'overview';
+                showSection(hash);
+            });
+
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('href').slice(1);
+                    showSection(section);
+                });
+            });
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+        })();
+    </script>
+</body>
+</html>
