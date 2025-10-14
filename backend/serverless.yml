@@ -1,0 +1,335 @@
+service: snapitanalytics-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'production'}
+  memorySize: 512
+  timeout: 30
+  environment:
+    GOOGLE_CLIENT_ID: ${ssm:/snapitanalytics/google/client-id}
+    GOOGLE_CLIENT_SECRET: ${ssm:/snapitanalytics/google/client-secret}
+    STRIPE_SECRET_KEY: ${ssm:/snapitanalytics/stripe/secret-key}
+    STRIPE_PUBLISHABLE_KEY: ${ssm:/snapitanalytics/stripe/publishable-key}
+    STRIPE_PRICE_BASIC_MONTHLY: ${ssm:/snapitanalytics/stripe/price-basic-monthly}
+    STRIPE_PRICE_PRO_MONTHLY: ${ssm:/snapitanalytics/stripe/price-pro-monthly}
+    STRIPE_PRICE_BUSINESS_MONTHLY: ${ssm:/snapitanalytics/stripe/price-business-monthly}
+    STRIPE_PRICE_ENTERPRISE_MONTHLY: ${ssm:/snapitanalytics/stripe/price-enterprise-monthly}
+    STRIPE_PRICE_ULTIMATE_MONTHLY: ${ssm:/snapitanalytics/stripe/price-ultimate-monthly}
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    ANALYTICS_TABLE: ${self:service}-analytics-${self:provider.stage}
+    EVENTS_TABLE: ${self:service}-events-${self:provider.stage}
+    PROJECTS_TABLE: ${self:service}-projects-${self:provider.stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:BatchWriteItem
+          Resource:
+            - !GetAtt UsersTable.Arn
+            - !GetAtt AnalyticsTable.Arn
+            - !GetAtt EventsTable.Arn
+            - !GetAtt ProjectsTable.Arn
+            - !Join ['', [!GetAtt UsersTable.Arn, '/index/*']]
+            - !Join ['', [!GetAtt AnalyticsTable.Arn, '/index/*']]
+            - !Join ['', [!GetAtt EventsTable.Arn, '/index/*']]
+            - !Join ['', [!GetAtt ProjectsTable.Arn, '/index/*']]
+
+functions:
+  # Health Check
+  health:
+    handler: handlers/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+
+  # Authentication
+  auth:
+    handler: handlers/auth.handler
+    events:
+      - http:
+          path: /auth/google
+          method: post
+          cors: true
+
+  authVerify:
+    handler: handlers/auth.verify
+    events:
+      - http:
+          path: /auth/verify
+          method: post
+          cors: true
+
+  authVerifyKey:
+    handler: handlers/auth.verifyKey
+    events:
+      - http:
+          path: /auth/verify-key
+          method: post
+          cors: true
+
+  # User Management
+  getUser:
+    handler: handlers/users.getUser
+    events:
+      - http:
+          path: /user
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  updateUser:
+    handler: handlers/users.updateUser
+    events:
+      - http:
+          path: /user
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  # Analytics Tracking
+  trackEvent:
+    handler: handlers/analytics.trackEvent
+    events:
+      - http:
+          path: /track
+          method: post
+          cors: true
+
+  trackBatch:
+    handler: handlers/analytics.trackBatch
+    events:
+      - http:
+          path: /track/batch
+          method: post
+          cors: true
+
+  getAnalytics:
+    handler: handlers/analytics.getAnalytics
+    events:
+      - http:
+          path: /analytics/{projectId}
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  # Projects
+  createProject:
+    handler: handlers/projects.createProject
+    events:
+      - http:
+          path: /projects
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  listProjects:
+    handler: handlers/projects.listProjects
+    events:
+      - http:
+          path: /projects
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  getTrackingCode:
+    handler: handlers/projects.getTrackingCode
+    events:
+      - http:
+          path: /projects/{projectId}/tracking-code
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  # Tracking Code Generation
+  generateTracking:
+    handler: handlers/tracking.generate
+    events:
+      - http:
+          path: /tracking/generate
+          method: post
+          cors: true
+
+  # Billing
+  createCheckoutSession:
+    handler: handlers/billing.createCheckoutSession
+    events:
+      - http:
+          path: /billing/checkout
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  webhookStripe:
+    handler: handlers/billing.webhookStripe
+    events:
+      - http:
+          path: /billing/webhook
+          method: post
+
+  cancelSubscription:
+    handler: handlers/billing.cancelSubscription
+    events:
+      - http:
+          path: /billing/cancel
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+
+  # Authorizer
+  authorizer:
+    handler: handlers/authorizer.handler
+
+resources:
+  Resources:
+    # DynamoDB Tables
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: EmailIndex
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
+    ProjectsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.PROJECTS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: projectId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: projectId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UserIdIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+
+    AnalyticsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.ANALYTICS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: projectId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: projectId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    EventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.EVENTS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: eventId
+            AttributeType: S
+          - AttributeName: projectId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: eventId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: ProjectIdTimestampIndex
+            KeySchema:
+              - AttributeName: projectId
+                KeyType: HASH
+              - AttributeName: timestamp
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    # API Gateway CORS Configuration
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+plugins:
+  - serverless-offline

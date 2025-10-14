@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapIT Analytics - Live Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #FF1493;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        .demo-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .demo-section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        button {
+            background: #FF1493;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #ff0080;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.3);
+        }
+        .product-card {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            width: 250px;
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF1493;
+            margin: 10px 0;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .long-content {
+            height: 2000px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        #cart-count {
+            background: #ff0080;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .stats {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 SnapIT Analytics Demo</h1>
+        <p class="subtitle">This page demonstrates all tracking features in action!</p>
+
+        <div class="info-box">
+            <strong>📊 What's Being Tracked:</strong>
+            <ul>
+                <li>Page views (you just generated one!)</li>
+                <li>Clicks on all buttons and links</li>
+                <li>Scroll depth as you scroll down</li>
+                <li>Form submissions</li>
+                <li>E-commerce events (add to cart, purchases)</li>
+                <li>Time spent on page</li>
+                <li>Custom conversion events</li>
+            </ul>
+        </div>
+
+        <!-- Conversion Tracking Demo -->
+        <div class="demo-section">
+            <h2>🎯 Conversion Tracking</h2>
+            <p>Click these buttons to trigger conversion events:</p>
+            <button onclick="trackSignup()">📧 Newsletter Signup</button>
+            <button onclick="trackDownload()">📥 Download eBook</button>
+            <button onclick="trackTrial()">🚀 Start Free Trial</button>
+        </div>
+
+        <!-- E-commerce Demo -->
+        <div class="demo-section">
+            <h2>🛒 E-commerce Tracking</h2>
+            <p>Cart Items: <span id="cart-count">0</span></p>
+
+            <div class="product-card">
+                <img src="" alt="Product 1">
+                <h3>Premium Widget</h3>
+                <div class="price">$29.99</div>
+                <button onclick="addToCart('Premium Widget', 29.99)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="" alt="Product 2">
+                <h3>Deluxe Package</h3>
+                <div class="price">$49.99</div>
+                <button onclick="addToCart('Deluxe Package', 49.99)">Add to Cart</button>
+            </div>
+
+            <br><br>
+            <button onclick="checkout()">💳 Checkout</button>
+            <button onclick="completePurchase()">✅ Complete Purchase</button>
+            <button onclick="abandonCart()">❌ Abandon Cart</button>
+        </div>
+
+        <!-- Form Tracking Demo -->
+        <div class="demo-section">
+            <h2>📝 Form Tracking</h2>
+            <form onsubmit="handleFormSubmit(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <textarea placeholder="Message" rows="4" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Click Tracking Demo -->
+        <div class="demo-section">
+            <h2>🖱️ Click Heat Map Tracking</h2>
+            <p>Click anywhere in this section to generate heat map data points:</p>
+            <div style="background: #f0f0f0; padding: 40px; border-radius: 10px; text-align: center; margin: 20px 0;">
+                <h3>Click Test Area</h3>
+                <p>Every click is recorded with X/Y coordinates!</p>
+                <button>Button 1</button>
+                <button>Button 2</button>
+                <button>Button 3</button>
+            </div>
+        </div>
+
+        <!-- Custom Events Demo -->
+        <div class="demo-section">
+            <h2>⚡ Custom Event Tracking</h2>
+            <button onclick="trackVideoPlay()">▶️ Play Video</button>
+            <button onclick="trackShare('twitter')">🐦 Share on Twitter</button>
+            <button onclick="trackShare('facebook')">👍 Share on Facebook</button>
+            <button onclick="trackFeature('dashboard')">📊 Use Dashboard</button>
+        </div>
+
+        <!-- Outbound Links -->
+        <div class="demo-section">
+            <h2>🔗 Outbound Link Tracking</h2>
+            <p>These external links are automatically tracked:</p>
+            <a href="https://google.com" target="_blank">Visit Google</a> |
+            <a href="https://github.com" target="_blank">Visit GitHub</a> |
+            <a href="https://twitter.com" target="_blank">Visit Twitter</a>
+        </div>
+
+        <!-- Stats Display -->
+        <div class="stats">
+            <h3>📈 Current Session Stats</h3>
+            <p><strong>Session ID:</strong> <span id="session-id">Loading...</span></p>
+            <p><strong>Visitor ID:</strong> <span id="visitor-id">Loading...</span></p>
+            <p><strong>Time on Page:</strong> <span id="time-on-page">0s</span></p>
+        </div>
+
+        <!-- Scroll Depth Test -->
+        <div class="long-content">
+            <h2>📏 Scroll Depth Tracking</h2>
+            <p>Scroll down this long section to trigger scroll depth milestones (25%, 50%, 75%, 100%)</p>
+            <p style="margin-top: 500px;">Keep scrolling... (25% milestone)</p>
+            <p style="margin-top: 500px;">Almost halfway... (50% milestone)</p>
+            <p style="margin-top: 500px;">Getting close... (75% milestone)</p>
+            <p style="margin-top: 500px;">🎉 You reached the bottom! (100% milestone)</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #e8f5e9; border-radius: 10px;">
+            <h3>✅ All Events Tracked!</h3>
+            <p>Check your SnapIT Analytics dashboard to see all these events in real-time.</p>
+            <p>Open your browser console to see tracking confirmations.</p>
+        </div>
+    </div>
+
+    <!-- SnapIT Analytics Tracker -->
+    <script>
+        // This would normally come from your dashboard
+        // For demo purposes, we'll show the structure
+        (function() {
+            var s = document.createElement('script');
+            s.src = 'https://d1jlsq4lcubpa9.cloudfront.net/tracker.js';
+            s.async = true;
+            s.onload = function() {
+                window.snapitConfig = {
+                    projectId: 'DEMO_PROJECT_ID',
+                    trackingCode: 'DEMO_TRACKING_CODE'
+                };
+
+                // Display session info
+                setTimeout(() => {
+                    if (window.snapitAnalytics) {
+                        document.getElementById('session-id').textContent = window.snapitAnalytics.getSessionId();
+                        document.getElementById('visitor-id').textContent = window.snapitAnalytics.getVisitorId();
+                    }
+                }, 500);
+            };
+            document.head.appendChild(s);
+        })();
+    </script>
+
+    <script>
+        // E-commerce functions
+        let cart = [];
+
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            document.getElementById('cart-count').textContent = cart.length;
+
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackAddToCart({
+                    name: product,
+                    price: price,
+                    quantity: 1,
+                    category: 'Demo Products'
+                });
+            }
+
+            showNotification(`Added ${product} to cart!`);
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Cart is empty!');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackCheckoutStarted({
+                    items: cart.length,
+                    total: total,
+                    currency: 'USD'
+                });
+            }
+
+            showNotification('Checkout started!');
+        }
+
+        function completePurchase() {
+            if (cart.length === 0) {
+                alert('Cart is empty!');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackPurchase({
+                    id: 'ORDER-' + Date.now(),
+                    total: total,
+                    items: cart.length,
+                    currency: 'USD',
+                    paymentMethod: 'demo'
+                });
+            }
+
+            showNotification('Purchase completed! 🎉');
+            cart = [];
+            document.getElementById('cart-count').textContent = '0';
+        }
+
+        function abandonCart() {
+            if (cart.length === 0) {
+                alert('Cart is empty!');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackAbandonedCart({
+                    items: cart.length,
+                    total: total,
+                    currency: 'USD'
+                });
+            }
+
+            showNotification('Cart abandoned 😢');
+        }
+
+        // Conversion functions
+        function trackSignup() {
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackConversion('newsletter_signup');
+            }
+            showNotification('Newsletter signup tracked!');
+        }
+
+        function trackDownload() {
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackConversion('ebook_download');
+            }
+            showNotification('eBook download tracked!');
+        }
+
+        function trackTrial() {
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.trackConversion('trial_started', 0);
+            }
+            showNotification('Free trial started!');
+        }
+
+        // Custom event functions
+        function trackVideoPlay() {
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.track('video_play', {
+                    video: 'demo-video.mp4',
+                    duration: 120
+                });
+            }
+            showNotification('Video play tracked!');
+        }
+
+        function trackShare(platform) {
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.track('social_share', {
+                    platform: platform,
+                    url: window.location.href
+                });
+            }
+            showNotification(`Share to ${platform} tracked!`);
+        }
+
+        function trackFeature(feature) {
+            if (window.snapitAnalytics) {
+                window.snapitAnalytics.track('feature_used', {
+                    feature: feature,
+                    timestamp: Date.now()
+                });
+            }
+            showNotification(`Feature usage tracked: ${feature}`);
+        }
+
+        // Form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showNotification('Form submission tracked!');
+            e.target.reset();
+            return false;
+        }
+
+        // Notification helper
+        function showNotification(message) {
+            const div = document.createElement('div');
+            div.style.cssText = 'position:fixed;top:20px;right:20px;background:#4caf50;color:white;padding:15px 25px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;animation:slideIn 0.3s;';
+            div.textContent = message;
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.animation = 'slideOut 0.3s';
+                setTimeout(() => div.remove(), 300);
+            }, 3000);
+        }
+
+        // Update time on page
+        let startTime = Date.now();
+        setInterval(() => {
+            const seconds = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('time-on-page').textContent =
+                minutes > 0 ? `${minutes}m ${secs}s` : `${secs}s`;
+        }, 1000);
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

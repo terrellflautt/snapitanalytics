@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapIt Analytics - Beat the Competition with 70% Lower Costs</title>
+    <meta name="description" content="Professional website analytics that costs 70% less than Mixpanel, Amplitude & Adobe Analytics. Get real-time insights, conversion tracking, and advanced features starting free.">
+    
+    <!-- Cross-Origin Policies for Google OAuth -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="unsafe-none">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/landingstyles.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    
+    <!-- Enhanced Features -->
+    <script src="/js/onboarding.js" defer></script>
+    
+    <!-- SnapIt Analytics Tracking (Dogfooding) -->
+    <script>
+        window.SNAPIT_TRACKING_ID = 'SA_snapitanalytics_production';
+        window.SNAPIT_DEBUG = false;
+    </script>
+    <script src="/analytics.js" defer></script>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingText">Setting up your analytics dashboard...</p>
+        <div class="loading-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>SnapIt Analytics</h1>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <div id="g_id_onload"
+                     data-client_id="242648112266-l6ckf3312kpaa87smljdprc4jfma1gcm.apps.googleusercontent.com"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin" 
+                     data-type="standard"
+                     data-size="medium"
+                     data-theme="outline"
+                     data-text="sign_in_with"
+                     data-shape="rectangular"
+                     data-logo_alignment="left">
+                </div>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Alpha Warning Banner -->
+    <div class="alpha-warning">
+        <div class="container">
+            <i class="fas fa-flask"></i>
+            <span><strong>Early Alpha:</strong> SnapIt Analytics is in early alpha testing. Use at your own risk. Features may be unstable.</span>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Beat the Competition with 70% Lower Analytics Costs
+                </h1>
+                <p class="hero-subtitle">
+                    Get the same powerful features as Mixpanel, Amplitude & Adobe Analytics - but at a fraction of the price. Start tracking your website's success today.
+                </p>
+                
+                <div class="value-props">
+                    <div class="value-prop">
+                        <i class="fas fa-check-circle"></i>
+                        <span>10K page views/month FREE</span>
+                    </div>
+                    <div class="value-prop">
+                        <i class="fas fa-zap"></i>
+                        <span>Real-time tracking</span>
+                    </div>
+                    <div class="value-prop">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>GDPR compliant</span>
+                    </div>
+                    <div class="value-prop">
+                        <i class="fas fa-clock"></i>
+                        <span>5-minute setup</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    <div class="google-signin-wrapper">
+                        <div id="g_id_onload_hero"
+                             data-client_id="242648112266-l6ckf3312kpaa87smljdprc4jfma1gcm.apps.googleusercontent.com"
+                             data-callback="handleCredentialResponse"
+                             data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin" 
+                             data-type="standard"
+                             data-size="large"
+                             data-theme="filled_blue"
+                             data-text="get_started_with"
+                             data-shape="rectangular"
+                             data-logo_alignment="left"
+                             data-width="280">
+                        </div>
+                    </div>
+                    <p class="cta-text">
+                        🚀 Start with 10K free page views • No credit card required • 5-minute setup
+                    </p>
+                    
+                    <!-- Non-intrusive help button -->
+                    <div class="help-section" style="margin-top: 1rem;">
+                        <button class="help-button" onclick="restartOnboarding()" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.875rem; cursor: pointer;">
+                            <i class="fas fa-question-circle" style="margin-right: 0.5rem;"></i>Need help getting started?
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+           <div class="dashboard-preview">
+                <div class="dashboard-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Real-time Analytics Dashboard</h4>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">24.8K</div>
+                            <div class="stat-label">Page Views</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8.2K</div>
+                            <div class="stat-label">Visitors</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12.4%</div>
+                            <div class="stat-label">Conversion Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">3m 42s</div>
+                            <div class="stat-label">Avg. Session</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-chart">
+                        <div class="chart-line"></div>
+                    </div>
+                    
+                    <!-- Code Preview Section - FIXED -->
+                    <div class="code-preview">
+                        <div class="code-header">
+                            <div class="code-header-left">
+                                <div class="code-dots">
+                                    <div class="code-dot red"></div>
+                                    <div class="code-dot yellow"></div>
+                                    <div class="code-dot green"></div>
+                                </div>
+                                <span class="code-title">Add to your website</span>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="code-content">
+                            <pre id="trackingCodeDisplay"><code><span class="code-comment">&lt;!-- Sign in with Google to get your tracking code --&gt;</span>
+<span class="code-keyword">&lt;script&gt;</span>
+  <span class="code-keyword">window</span>.<span class="code-function">SNAPIT_TRACKING_ID</span> = <span class="code-string">'SA_your_id_here'</span>;
+  <span class="code-keyword">window</span>.<span class="code-function">SNAPIT_API_URL</span> = <span class="code-string">'https://api.snapitanalytics.com'</span>;
+<span class="code-keyword">&lt;/script&gt;</span>
+
+<span class="code-comment">// Optional: Track custom events</span>
+<span class="code-function">snapit</span>.<span class="code-function">track</span>(<span class="code-string">'button_click'</span>, { <span class="code-highlight">location</span>: <span class="code-string">'header'</span> });
+<span class="code-function">snapit</span>.<span class="code-function">conversion</span>(<span class="code-string">'purchase'</span>, <span class="code-highlight">99.99</span>);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="subtitle">Features</div>
+                <h3>Everything you need to understand your users</h3>
+                <p>Professional-grade analytics tools that help you make data-driven decisions and grow your business faster.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-chart-line"></i>
+                    <h4>Real-time Analytics</h4>
+                    <p>Monitor your website's performance in real-time with live visitor tracking, instant event recording, and up-to-the-second conversion metrics.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-mouse-pointer"></i>
+                    <h4>Heatmaps &amp; Session Replay</h4>
+                    <p>See exactly how users interact with your site through click heatmaps, scroll tracking, and session recordings to optimize user experience.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-funnel-dollar"></i>
+                    <h4>Conversion Tracking</h4>
+                    <p>Track every conversion, set up custom goals, and analyze your sales funnel to identify opportunities for growth and optimization.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-users"></i>
+                    <h4>User Segmentation</h4>
+                    <p>Create detailed user segments based on behavior, demographics, and custom properties to deliver personalized experiences.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-code"></i>
+                    <h4>Developer-Friendly API</h4>
+                    <p>Integrate seamlessly with our robust REST API, comprehensive documentation, and SDKs for popular frameworks and platforms.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-shield-alt"></i>
+                    <h4>Privacy &amp; Compliance</h4>
+                    <p>Built with privacy-first principles, GDPR compliance, and enterprise-grade security to protect your users' data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="subtitle">Pricing</div>
+                <h3>Beat the competition with 70% lower costs</h3>
+                <p>Same powerful features as Mixpanel, Amplitude &amp; Adobe Analytics - but at a fraction of the price.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>Free</h4>
+                        <div class="price">$0<span>/month</span></div>
+                        <p class="pricing-description">Perfect for startups and small websites</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>10,000 events/month</li>
+                        <li>3 websites</li>
+                        <li>30 days data retention</li>
+                        <li>Basic analytics dashboard</li>
+                        <li>Real-time tracking</li>
+                        <li>Community support</li>
+                        <li>GDPR compliant</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="signUpWithPlan('free')">Start Free</button>
+                </div>
+
+                <!-- Starter Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>Basic</h4>
+                        <div class="price">$9.99<span>/month</span></div>
+                        <p class="pricing-description">Growing websites and small businesses</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>100K events/month</li>
+                        <li>10 websites</li>
+                        <li>90 days data retention</li>
+                        <li>Advanced analytics</li>
+                        <li>Heatmaps &amp; session replay</li>
+                        <li>Conversion tracking</li>
+                        <li>API access</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="signUpWithPlan('basic')">Choose Basic</button>
+                </div>
+
+                <!-- Growth Plan - Featured -->
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h4>Pro</h4>
+                        <div class="price">$19.99<span>/month</span></div>
+                        <p class="pricing-description">Professional websites and agencies</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>500K events/month</li>
+                        <li>25 websites</li>
+                        <li>6 months data retention</li>
+                        <li>Full heatmaps &amp; recordings</li>
+                        <li>Advanced funnels</li>
+                        <li>Cohort analysis</li>
+                        <li>Custom events</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="signUpWithPlan('pro')">Choose Pro</button>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>Business</h4>
+                        <div class="price">$49.99<span>/month</span></div>
+                        <p class="pricing-description">Growing companies with high traffic</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>2M page views/month</li>
+                        <li>Unlimited websites</li>
+                        <li>1 year data retention</li>
+                        <li>Advanced segmentation</li>
+                        <li>White-label reports</li>
+                        <li>Team collaboration</li>
+                        <li>Slack integration</li>
+                        <li>Phone support</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="signUpWithPlan('business')">Choose Business</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>Enterprise</h4>
+                        <div class="price">$99.99<span>/month</span></div>
+                        <p class="pricing-description">Large teams with dedicated support</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>50M events/month</li>
+                        <li>Unlimited websites</li>
+                        <li>2 years data retention</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom integrations</li>
+                        <li>Advanced security</li>
+                        <li>SLA guarantee</li>
+                        <li>24/7 priority support</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="signUpWithPlan('enterprise')">Choose Enterprise</button>
+                </div>
+
+                <!-- Ultimate Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>Ultimate</h4>
+                        <div class="price">$199.99<span>/month</span></div>
+                        <p class="pricing-description">Enterprise with marketing strategist</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>100M+ events/month</li>
+                        <li>Unlimited everything</li>
+                        <li>Custom data retention</li>
+                        <li>Dedicated account manager</li>
+                        <li>Personal marketing strategist</li>
+                        <li>Custom development</li>
+                        <li>White-glove onboarding</li>
+                        <li>Strategic consulting</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="signUpWithPlan('agency')">Choose Agency</button>
+                </div>
+            </div>
+
+            <!-- Comparison Note -->
+            <div class="comparison-section">
+                <h4 style="color: #2563eb; margin-bottom: 1rem;">💰 Save 70% vs Competitors</h4>
+                <p style="color: #666; margin-bottom: 2rem;">Compare our Growth plan ($14.99) vs competitors:</p>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <div class="comparison-title" style="color: #dc2626;">Mixpanel</div>
+                        <div class="comparison-price">~$100/month</div>
+                        <div class="comparison-events">2M events</div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-title" style="color: #dc2626;">Amplitude</div>
+                        <div class="comparison-price">~$80/month</div>
+                        <div class="comparison-events">2M events</div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-title" style="color: #dc2626;">Adobe Analytics</div>
+                        <div class="comparison-price">~$150/month</div>
+                        <div class="comparison-events">Enterprise only</div>
+                    </div>
+                    <div class="comparison-card winner">
+                        <div class="comparison-title">SnapIt Analytics</div>
+                        <div class="comparison-price">$14.99/month</div>
+                        <div class="comparison-events">2M events + more features</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>SnapIt Analytics</h3>
+                    <p>Professional website analytics that costs 70% less than competitors. Get real-time insights, conversion tracking, and advanced features starting free.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="/testing.html">API Documentation</a></li>
+                        <li><a href="https://status.snapitanalytics.com" target="_blank">Status Page</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#contact">About</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <form action="https://dnxslxuth3.execute-api.us-east-1.amazonaws.com/production/submit" method="POST" class="contact-form">
+                        <input type="hidden" name="access_key" value="sa_ac6e0311d49b41f88f049692239e80f6">
+                        <input type="text" name="name" placeholder="Your Name" required class="contact-input" autocomplete="name">
+                        <input type="email" name="email" placeholder="Your Email" required class="contact-input" autocomplete="email">
+                        <textarea name="message" placeholder="Your Message" required class="contact-textarea" rows="3"></textarea>
+                        <button type="submit" class="contact-submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 SnapIt Analytics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // SnapIt Analytics Landing Page - JavaScript
+        (function() {
+            'use strict';
+            
+            // Configuration
+            const CONFIG = {
+                API_BASE_URL: 'https://api.snapitanalytics.com',
+                STRIPE_PUBLISHABLE_KEY: 'pk_test_51Rn1JBI2ppOZi4gozMa9c5JaGwNruBHZL0fZSL2e29znOXxgnzeRrG9ENRmI0uKv1Qaf8PGRnEYNMFGGwDDTaXyE00ipuTE7Qr',
+                STRIPE_PRICE_IDS: {
+                    basic: 'price_1QaE5UI2ppOZi4goXRuftCOz',
+                    pro: 'price_1QaE5vI2ppOZi4goXqGpFMvK',
+                    business: 'price_1QaE6II2ppOZi4go8K6mL8YZ',
+                    enterprise: 'price_1QaE6hI2ppOZi4go4ZcK1pXW',
+                    agency: 'price_1QaE7AI2ppOZi4goKZcvQPdR',
+                    ultimate: 'price_1QaE7YI2ppOZi4goAc3xW8nZ'
+                }
+            };
+
+            // State management
+            let currentUser = null;
+            let isInitialized = false;
+
+            // DOM element cache
+            const elements = {};
+
+            // Cache DOM elements
+            function cacheElements() {
+                elements.mobileMenuToggle = document.getElementById('mobileMenuToggle');
+                elements.navMenu = document.getElementById('navMenu');
+                elements.loadingOverlay = document.getElementById('loadingOverlay');
+                elements.notification = document.getElementById('notification');
+                elements.navbar = document.querySelector('.navbar');
+            }
+
+            // Mobile menu functionality
+            function initMobileMenu() {
+                if (elements.mobileMenuToggle && elements.navMenu) {
+                    elements.mobileMenuToggle.addEventListener('click', function() {
+                        elements.navMenu.classList.toggle('active');
+                    });
+
+                    // Close menu when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!elements.navMenu.contains(e.target) && !elements.mobileMenuToggle.contains(e.target)) {
+                            elements.navMenu.classList.remove('active');
+                        }
+                    });
+                }
+            }
+
+            // Smooth scrolling for navigation
+            function initSmoothScrolling() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                        if (elements.navMenu) {
+                            elements.navMenu.classList.remove('active');
+                        }
+                    });
+                });
+            }
+
+            // Utility functions
+            function showLoading() {
+                if (elements.loadingOverlay) {
+                    elements.loadingOverlay.style.display = 'flex';
+                }
+            }
+
+            function hideLoading() {
+                if (elements.loadingOverlay) {
+                    elements.loadingOverlay.style.display = 'none';
+                }
+            }
+
+            function showNotification(message, type = 'success') {
+                if (!elements.notification) return;
+                
+                elements.notification.textContent = message;
+                elements.notification.className = `notification ${type}`;
+                elements.notification.classList.add('show');
+
+                setTimeout(() => {
+                    elements.notification.classList.remove('show');
+                }, 5000);
+            }
+
+            // Show welcome modal with tracking code (like snapitforms.com)
+            function showWelcomeModal(user, trackingCode = null) {
+                // Use provided tracking code or generate a default one
+                const displayCode = trackingCode || `<!-- SnapIt Analytics Tracking Code -->
+<script>
+  window.SNAPIT_TRACKING_ID = '${user.accessKey}';
+  window.SNAPIT_API_URL = 'https://api.snapitanalytics.com';
+<\/script>
+<script src="https://snapitanalytics.com/analytics.js"><\/script>
+
+<!-- Optional: Track custom events -->
+<script>
+  // Track page view (automatic)
+  // Custom events:
+  // snapit.track('button_click', { location: 'header' });
+  // snapit.conversion('purchase', 99.99);
+<\/script>`;
+                
+                // Create modal HTML
+                const modalHTML = `
+                    <div class="modal-overlay" id="welcomeModal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>🎉 Welcome to SnapIt Analytics!</h3>
+                                <button class="modal-close" onclick="closeWelcomeModal()">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Your analytics tracking is ready! Here's your tracking code:</p>
+                                
+                                <div class="code-preview welcome-code">
+                                    <div class="code-header">
+                                        <span class="code-title">Add this to your website</span>
+                                        <button class="copy-btn" onclick="copyWelcomeCode()">
+                                            <i class="fas fa-copy"></i> Copy Code
+                                        </button>
+                                    </div>
+                                    <div class="code-content">
+                                        <pre><code>${escapeHtml(displayCode)}</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <div class="welcome-info">
+                                    <div class="info-item">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span><strong>Free Plan:</strong> 100K events/month included</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span><strong>Analytics Updates:</strong> Daily batch updates (24h cycle)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-key"></i>
+                                        <span><strong>Access Key:</strong> ${user.accessKey}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-actions">
+                                    <button class="btn btn-primary" onclick="openDashboard()">
+                                        <i class="fas fa-tachometer-alt"></i> Open Dashboard
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="closeWelcomeModal()">
+                                        <i class="fas fa-arrow-right"></i> Continue to Dashboard
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add to page
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                
+                // Add modal styles if not already added
+                if (!document.querySelector('#modal-styles')) {
+                    const modalStyles = document.createElement('style');
+                    modalStyles.id = 'modal-styles';
+                    modalStyles.textContent = `
+                        .modal-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0, 0, 0, 0.75);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            z-index: 10000;
+                            animation: fadeIn 0.3s ease;
+                        }
+                        
+                        .modal-content {
+                            background: white;
+                            border-radius: 12px;
+                            max-width: 600px;
+                            width: 90%;
+                            max-height: 90vh;
+                            overflow-y: auto;
+                            animation: slideUp 0.3s ease;
+                        }
+                        
+                        .modal-header {
+                            padding: 1.5rem;
+                            border-bottom: 1px solid #e5e7eb;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
+                        
+                        .modal-header h3 {
+                            margin: 0;
+                            color: #2563eb;
+                        }
+                        
+                        .modal-close {
+                            background: none;
+                            border: none;
+                            font-size: 1.5rem;
+                            cursor: pointer;
+                            color: #6b7280;
+                        }
+                        
+                        .modal-body {
+                            padding: 1.5rem;
+                        }
+                        
+                        .welcome-code {
+                            margin: 1rem 0;
+                        }
+
+                        .welcome-code pre {
+                            background: #1e293b;
+                            padding: 1rem;
+                            border-radius: 6px;
+                            overflow-x: auto;
+                            margin: 0;
+                        }
+
+                        .welcome-code code {
+                            color: #e2e8f0;
+                            font-family: 'Fira Code', monospace;
+                            font-size: 0.875rem;
+                            line-height: 1.5;
+                        }
+
+                        .welcome-info {
+                            margin: 1.5rem 0;
+                        }
+                        
+                        .info-item {
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 0.75rem;
+                            color: #374151;
+                        }
+                        
+                        .info-item i {
+                            margin-right: 0.75rem;
+                            color: #2563eb;
+                            width: 16px;
+                        }
+                        
+                        .modal-actions {
+                            display: flex;
+                            gap: 1rem;
+                            margin-top: 1.5rem;
+                        }
+                        
+                        @keyframes fadeIn {
+                            from { opacity: 0; }
+                            to { opacity: 1; }
+                        }
+                        
+                        @keyframes slideUp {
+                            from { transform: translateY(20px); opacity: 0; }
+                            to { transform: translateY(0); opacity: 1; }
+                        }
+                    `;
+                    document.head.appendChild(modalStyles);
+                }
+            }
+
+            // Google Sign-In handler
+            window.handleCredentialResponse = function(response) {
+                if (!response || !response.credential) {
+                    console.error('Invalid Google OAuth response:', response);
+                    showNotification('Google sign-in failed. Please try again.', 'error');
+                    return;
+                }
+                console.log('Google OAuth response received:', response);
+                showLoading();
+                
+                fetch(`${CONFIG.API_BASE_URL}/auth/google`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        credential: response.credential
+                    })
+                })
+                .then(response => {
+                    console.log('Backend response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Backend response data:', data);
+                    
+                    if (data.success) {
+                        currentUser = data.user;
+                        localStorage.setItem('accessToken', data.tokens.accessToken);
+                        localStorage.setItem('refreshToken', data.tokens.refreshToken);
+                        localStorage.setItem('userData', JSON.stringify(data.user));
+                        
+                        console.log('User signed in successfully:', data.user);
+                        
+                        // Auto-generate tracking code for new users and show modal
+                        // Keep loading visible until tracking code generation completes
+                        autoGenerateTrackingCode(data.user);
+                        
+                        // Update UI to show signed-in state
+                        updateSignedInState();
+                        
+                    } else {
+                        console.error('Auth failed:', data);
+                        hideLoading();
+                        showNotification(`Sign in failed: ${data.error || 'Unknown error'}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Sign in error:', error);
+                    showNotification(`Connection error: ${error.message}`, 'error');
+                });
+            };
+
+            // Plan signup handler
+            window.signUpWithPlan = function(plan) {
+                if (plan === 'free') {
+                    // Scroll to the Google sign-in button
+                    document.querySelector('.google-signin-wrapper').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    showNotification('Click "Get started with Google" above to create your free account!', 'success');
+                    return;
+                }
+
+                if (!currentUser) {
+                    showNotification('Please sign in with Google first to choose a paid plan', 'error');
+                    return;
+                }
+
+                redirectToStripeCheckout(plan);
+            };
+
+            // Copy to clipboard function  
+            function copyCode() {
+                const codeContent = document.querySelector('.code-content pre code');
+                if (!codeContent) return;
+                
+                const text = codeContent.textContent || codeContent.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('Tracking code copied to clipboard!', 'success');
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showNotification('Tracking code copied to clipboard!', 'success');
+                });
+            }
+
+            // Stripe checkout redirect
+            function redirectToStripeCheckout(plan) {
+                showLoading();
+
+                const priceId = CONFIG.STRIPE_PRICE_IDS[plan];
+                if (!priceId) {
+                    hideLoading();
+                    showNotification('Invalid plan selected', 'error');
+                    return;
+                }
+
+                fetch(`${CONFIG.API_BASE_URL}/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        accessKey: currentUser.accessKey,
+                        tier: plan,
+                        successUrl: `${window.location.origin}/dashboard.html?success=true&plan=${plan}`,
+                        cancelUrl: `${window.location.origin}/?cancelled=true`
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    
+                    if (data.success && data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        showNotification('Failed to create checkout session. Please try again.', 'error');
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Checkout error:', error);
+                    showNotification('Failed to process payment. Please try again.', 'error');
+                });
+            }
+
+            
+
+            // Authentication status check
+            function checkAuthStatus() {
+                const token = localStorage.getItem('accessToken');
+                if (token) {
+                    fetch(`${CONFIG.API_BASE_URL}/auth/verify`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.valid) {
+                            currentUser = data.user;
+                            updateSignedInState();
+                        } else {
+                            localStorage.removeItem('accessToken');
+                            localStorage.removeItem('refreshToken');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Auth verification error:', error);
+                        localStorage.removeItem('accessToken');
+                        localStorage.removeItem('refreshToken');
+                    });
+                }
+            }
+
+            // Update UI for signed-in state
+            function updateSignedInState() {
+                const signInButtons = document.querySelectorAll('.g_id_signin');
+                signInButtons.forEach(button => {
+                    button.style.display = 'none';
+                });
+
+                if (elements.navMenu) {
+                    const existingDashboardLink = elements.navMenu.querySelector('a[href="/dashboard.html"]');
+                    if (!existingDashboardLink) {
+                        const dashboardLink = document.createElement('a');
+                        dashboardLink.href = '/dashboard.html';
+                        dashboardLink.className = 'btn btn-primary';
+                        dashboardLink.textContent = 'Dashboard';
+                        dashboardLink.style.marginLeft = '1rem';
+                        elements.navMenu.appendChild(dashboardLink);
+                    }
+                }
+
+                // Generate tracking code for signed-in user
+                generateTrackingCode();
+            }
+
+            // Auto-generate tracking code for new users
+            function autoGenerateTrackingCode(user = null) {
+                const targetUser = user || currentUser;
+                if (!targetUser) return;
+                
+                // Check if user already has tracking codes
+                if (targetUser.trackingIds && targetUser.trackingIds.length > 0) {
+                    console.log('User already has tracking codes:', targetUser.trackingIds);
+                    // Hide loading and show modal with existing access key
+                    hideLoading();
+                    showWelcomeModal(targetUser);
+                    return;
+                }
+                
+                console.log('Auto-generating tracking code for new user...');
+                
+                fetch(`${CONFIG.API_BASE_URL}/tracking/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        websiteName: 'SnapIt Analytics Demo',
+                        domain: 'snapitanalytics.com'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Tracking code generation response:', data);
+                    hideLoading();
+                    
+                    if (data.success) {
+                        // Store the tracking code and embed it on the page
+                        localStorage.setItem('userTrackingCode', data.trackingCode);
+                        localStorage.setItem('userTrackingId', data.trackingId);
+                        
+                        // Embed the tracking code in the page
+                        embedTrackingCode(data.trackingCode);
+                        
+                        // Update the code display
+                        updateTrackingCodeDisplay(data.trackingCode);
+                        
+                        // Show welcome modal with the actual tracking code
+                        showWelcomeModal(targetUser, data.trackingCode);
+                        
+                        showNotification('🎉 Tracking code generated and embedded! You are now tracking yourself.', 'success');
+                    } else {
+                        // Show modal even if tracking code generation failed
+                        showWelcomeModal(targetUser);
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to auto-generate tracking code:', error);
+                    hideLoading();
+                    // Show modal even if there was an error
+                    showWelcomeModal(targetUser);
+                });
+            }
+            
+            // Embed tracking code into the page
+            function embedTrackingCode(trackingCode) {
+                // Create a script element and add it to the page
+                const script = document.createElement('script');
+                script.innerHTML = trackingCode.replace(/<!--[\s\S]*?-->/g, '').replace(/<\/?script[^>]*>/g, '');
+                document.head.appendChild(script);
+                
+                console.log('✅ Tracking code embedded - now tracking this page!');
+            }
+
+            // Generate tracking code for user (manual)
+            function generateTrackingCode() {
+                if (!currentUser) return;
+
+                fetch(`${CONFIG.API_BASE_URL}/tracking/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        websiteName: 'My Website',
+                        domain: window.location.hostname
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateTrackingCodeDisplay(data.trackingCode);
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to generate tracking code:', error);
+                });
+            }
+
+            // Update tracking code display
+            function updateTrackingCodeDisplay(trackingCode) {
+                const trackingCodeElement = document.getElementById('trackingCodeDisplay');
+                if (trackingCodeElement) {
+                    trackingCodeElement.innerHTML = `<code>${escapeHtml(trackingCode)}</code>`;
+                }
+            }
+
+            // Escape HTML for safe display
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // URL parameter checking
+            function checkUrlParameters() {
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                if (urlParams.get('cancelled') === 'true') {
+                    showNotification('Payment cancelled. You can try again anytime!', 'error');
+                }
+            }
+
+            // Navbar scroll effect
+            function initNavbarScrollEffect() {
+                let lastScrollTop = 0;
+                let ticking = false;
+
+                function updateNavbar() {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (elements.navbar) {
+                        if (scrollTop > lastScrollTop && scrollTop > 100) {
+                            elements.navbar.style.transform = 'translateY(-100%)';
+                        } else {
+                            elements.navbar.style.transform = 'translateY(0)';
+                        }
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                    ticking = false;
+                }
+
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        requestAnimationFrame(updateNavbar);
+                        ticking = true;
+                    }
+                }, { passive: true });
+            }
+
+            // Scroll animations
+            function initScrollAnimations() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.feature-card, .pricing-card').forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    observer.observe(card);
+                });
+            }
+
+            // Event tracking
+            function initEventTracking() {
+                document.querySelectorAll('.pricing-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const onclickAttr = this.getAttribute('onclick');
+                        if (onclickAttr) {
+                            const planMatch = onclickAttr.match(/'([^']+)'/);
+                            if (planMatch && window.snapit) {
+                                window.snapit.track('plan_interest', { plan: planMatch[1] });
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Error handling
+            function initErrorHandling() {
+                window.addEventListener('error', function(e) {
+                    console.error('Runtime error:', e.error);
+                    showNotification('Something went wrong. Please refresh the page.', 'error');
+                });
+
+                window.addEventListener('unhandledrejection', function(e) {
+                    console.error('Unhandled promise rejection:', e.reason);
+                    showNotification('Connection error. Please check your internet connection.', 'error');
+                    e.preventDefault();
+                });
+            }
+
+            // Initialize Google Sign-In
+            function initGoogleSignIn() {
+                // Ensure Google Sign-In API is loaded
+                if (typeof google !== 'undefined' && google.accounts) {
+                    google.accounts.id.initialize({
+                        client_id: "242648112266-l6ckf3312kpaa87smljdprc4jfma1gcm.apps.googleusercontent.com",
+                        callback: handleCredentialResponse,
+                        auto_prompt: false
+                    });
+                    console.log('Google Sign-In initialized successfully');
+                } else {
+                    // Retry after a short delay if Google API not ready
+                    setTimeout(initGoogleSignIn, 500);
+                }
+            }
+
+            // Main initialization
+            function init() {
+                if (isInitialized) return;
+                
+                cacheElements();
+                initMobileMenu();
+                initSmoothScrolling();
+                initNavbarScrollEffect();
+                initScrollAnimations();
+                initEventTracking();
+                initErrorHandling();
+                initGoogleSignIn();
+                checkAuthStatus();
+                checkUrlParameters();
+                
+                // Hide loading overlay after initialization
+                hideLoading();
+                
+                isInitialized = true;
+            }
+
+            // Modal control functions
+            window.closeWelcomeModal = function() {
+                const modal = document.getElementById('welcomeModal');
+                if (modal) {
+                    modal.remove();
+                }
+                // Redirect to dashboard if user is authenticated
+                if (currentUser && currentUser.userId) {
+                    window.location.href = `/dashboard.html?user=${currentUser.userId}`;
+                }
+            };
+
+            window.copyWelcomeCode = function() {
+                const codeContent = document.querySelector('#welcomeModal .code-content pre code');
+                if (codeContent) {
+                    const text = codeContent.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        showNotification('Tracking code copied to clipboard!', 'success');
+                    }).catch(() => {
+                        showNotification('Failed to copy code', 'error');
+                    });
+                }
+            };
+
+            window.openDashboard = function() {
+                window.location.href = '/dashboard.html';
+            };
+
+            // Expose global functions
+            window.handleCredentialResponse = handleCredentialResponse;
+            window.signUpWithPlan = signUpWithPlan;
+            window.copyCode = copyCode;
+
+            // Check if user has existing tracking code and embed it
+            function checkAndEmbedExistingTrackingCode() {
+                const existingTrackingCode = localStorage.getItem('userTrackingCode');
+                if (existingTrackingCode) {
+                    console.log('Found existing tracking code, embedding...');
+                    embedTrackingCode(existingTrackingCode);
+                }
+            }
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    init();
+                    checkAndEmbedExistingTrackingCode();
+                });
+            } else {
+                init();
+                checkAndEmbedExistingTrackingCode();
+            }
+
+        })(); // End IIFE
+    </script>
+
+</body>
+</html>

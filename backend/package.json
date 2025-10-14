@@ -1,0 +1,25 @@
+{
+  "name": "snapitanalytics-backend",
+  "version": "1.0.0",
+  "description": "SnapIT Analytics Backend API",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "deploy:prod": "serverless deploy --stage production",
+    "remove": "serverless remove",
+    "logs": "serverless logs -f",
+    "test": "jest"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "jsonwebtoken": "^9.0.2",
+    "stripe": "^14.21.0",
+    "uuid": "^9.0.1",
+    "google-auth-library": "^9.6.3"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.3.3",
+    "jest": "^29.7.0"
+  }
+}
