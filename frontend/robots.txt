@@ -1,0 +1,12 @@
+# robots.txt for SnapIT Analytics
+
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://snapitanalytics.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1

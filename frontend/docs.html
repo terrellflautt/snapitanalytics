@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - SnapIT Analytics</title>
+    <meta name="description" content="Complete API documentation for SnapIT Analytics - Learn how to implement tracking, use the API, and customize your analytics">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #F9FAFB;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            margin-top: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar a {
+            color: #4B5563;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #F3F4F6;
+            color: #2563eb;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        h2 {
+            color: #2563eb;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E5E7EB;
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #374151;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        h4 {
+            color: #4B5563;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #4B5563;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: #4B5563;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .highlight-box {
+            background: #EFF6FF;
+            border-left: 4px solid #2563eb;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #D1FAE5;
+            border-left: 4px solid #10B981;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ec4899;
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        th {
+            background: #F3F4F6;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .method-get {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .method-post {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .method-put {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .method-delete {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>API Documentation</h1>
+            <p>Complete guide to SnapIT Analytics tracking and API</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <div class="two-column">
+            <aside class="sidebar">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#getting-started">Getting Started</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#auto-tracking">Auto Tracking</a></li>
+                    <li><a href="#custom-events">Custom Events</a></li>
+                    <li><a href="#ecommerce">E-commerce</a></li>
+                    <li><a href="#api-endpoints">API Endpoints</a></li>
+                    <li><a href="#rest-api">REST API</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                </ul>
+            </aside>
+
+            <main class="content">
+                <div class="highlight-box">
+                    <strong>Quick Start:</strong> Sign in → Create project → Copy tracking code → Paste into your website → Done! Analytics start immediately.
+                </div>
+
+                <h2 id="getting-started">Getting Started</h2>
+                <p>SnapIT Analytics provides powerful, privacy-friendly website analytics that's incredibly easy to implement. Our tracking script is ultra-lightweight (< 5KB) and requires zero configuration to get started.</p>
+
+                <h3>What You'll Track</h3>
+                <ul>
+                    <li><strong>Page Views:</strong> Every page visit with URL, title, and timestamp</li>
+                    <li><strong>Click Heatmaps:</strong> X/Y coordinates of every click for visual heatmaps</li>
+                    <li><strong>Traffic Sources:</strong> Where visitors come from (referrers, direct, etc.)</li>
+                    <li><strong>User Behavior:</strong> Scroll depth, visit duration, bounce rate</li>
+                    <li><strong>Device Info:</strong> Browser, screen resolution, operating system</li>
+                    <li><strong>Form Interactions:</strong> Form submissions and field engagement</li>
+                    <li><strong>E-commerce:</strong> Cart actions, checkouts, purchases (optional)</li>
+                    <li><strong>Custom Events:</strong> Track anything you want with custom events</li>
+                </ul>
+
+                <h2 id="installation">Installation</h2>
+
+                <h3>Step 1: Get Your Tracking Code</h3>
+                <ol>
+                    <li>Sign in to your <a href="/">SnapIT Analytics account</a></li>
+                    <li>Create a new project (or select existing)</li>
+                    <li>Copy your unique tracking code from the dashboard</li>
+                </ol>
+
+                <h3>Step 2: Add to Your Website</h3>
+                <p>Paste the tracking code in your website's <code>&lt;head&gt;</code> section, just before <code>&lt;/head&gt;</code>:</p>
+
+                <pre><code>&lt;!-- SnapIT Analytics Tracking Code --&gt;
+&lt;script src="https://cdn.snapitanalytics.com/tracker.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.snapitConfig = {
+    projectId: 'proj_abc123',
+    trackingCode: 'trk_xyz789'
+  };
+&lt;/script&gt;
+&lt;!-- End SnapIT Analytics --&gt;</code></pre>
+
+                <div class="success-box">
+                    <strong>That's it!</strong> Your website is now being tracked. Data will start appearing in your dashboard within seconds.
+                </div>
+
+                <h2 id="auto-tracking">Automatic Tracking</h2>
+                <p>Once installed, SnapIT Analytics automatically tracks the following events without any additional code:</p>
+
+                <h3>Page Views</h3>
+                <p>Automatically tracked on:</p>
+                <ul>
+                    <li>Initial page load</li>
+                    <li>URL changes (perfect for Single Page Applications)</li>
+                    <li>Browser back/forward navigation</li>
+                </ul>
+                <p><strong>Data captured:</strong> URL, page title, referrer, timestamp, session info</p>
+
+                <h3>Click Tracking & Heatmaps</h3>
+                <p>Every click is automatically tracked with:</p>
+                <ul>
+                    <li><strong>Element:</strong> What was clicked (button, link, etc.)</li>
+                    <li><strong>Text:</strong> Button/link text content</li>
+                    <li><strong>Position:</strong> X/Y coordinates (both relative % and absolute pixels)</li>
+                    <li><strong>Link destination:</strong> For link clicks</li>
+                    <li><strong>External links:</strong> Outbound link tracking</li>
+                </ul>
+
+                <h3>Scroll Depth</h3>
+                <p>Track how far users scroll on your pages:</p>
+                <ul>
+                    <li>25% scroll depth reached</li>
+                    <li>50% scroll depth reached</li>
+                    <li>75% scroll depth reached</li>
+                    <li>100% scroll depth reached (bottom of page)</li>
+                </ul>
+
+                <h3>Session Tracking</h3>
+                <p>Automatically tracks:</p>
+                <ul>
+                    <li><strong>Unique visitors:</strong> Persistent ID across sessions</li>
+                    <li><strong>Session ID:</strong> Unique ID per browsing session</li>
+                    <li><strong>Visit duration:</strong> Time spent on site</li>
+                    <li><strong>Session end:</strong> When user leaves or closes tab</li>
+                    <li><strong>User inactivity:</strong> Detects when user goes idle for 5+ minutes</li>
+                </ul>
+
+                <h3>Form Tracking</h3>
+                <p>Track form interactions:</p>
+                <ul>
+                    <li><strong>Form submissions:</strong> When forms are submitted</li>
+                    <li><strong>Field focus:</strong> Which form fields users interact with</li>
+                    <li><strong>Form ID:</strong> Identify which forms are being used</li>
+                </ul>
+
+                <h3>Error Tracking</h3>
+                <p>Automatically captures JavaScript errors:</p>
+                <ul>
+                    <li>Error message</li>
+                    <li>Filename where error occurred</li>
+                    <li>Line and column numbers</li>
+                </ul>
+
+                <h2 id="custom-events">Custom Event Tracking</h2>
+                <p>Track any custom event or interaction using the JavaScript API:</p>
+
+                <h3>Basic Custom Event</h3>
+                <pre><code>// Track a simple custom event
+window.snapitAnalytics.track('button_click', {
+  button: 'signup',
+  location: 'hero_section'
+});</code></pre>
+
+                <h3>Track with Properties</h3>
+                <pre><code>// Track an event with custom properties
+window.snapitAnalytics.track('video_played', {
+  videoId: 'intro_2024',
+  videoDuration: 120,
+  autoplay: false,
+  quality: '1080p'
+});</code></pre>
+
+                <h3>Manual Page View</h3>
+                <pre><code>// Manually track a page view (useful for SPAs)
+window.snapitAnalytics.trackPageView();</code></pre>
+
+                <h2 id="ecommerce">E-commerce Tracking</h2>
+                <p>For online stores, track the complete customer journey:</p>
+
+                <h3>Add to Cart</h3>
+                <pre><code>window.snapitAnalytics.trackAddToCart({
+  name: 'Wireless Headphones',
+  id: 'prod_12345',
+  price: 99.99,
+  quantity: 1,
+  category: 'Electronics'
+});</code></pre>
+
+                <h3>Remove from Cart</h3>
+                <pre><code>window.snapitAnalytics.trackRemoveFromCart({
+  name: 'Wireless Headphones',
+  id: 'prod_12345',
+  price: 99.99,
+  quantity: 1
+});</code></pre>
+
+                <h3>Checkout Started</h3>
+                <pre><code>window.snapitAnalytics.trackCheckoutStarted({
+  items: 3,
+  total: 249.97,
+  currency: 'USD'
+});</code></pre>
+
+                <h3>Purchase Completed</h3>
+                <pre><code>window.snapitAnalytics.trackPurchase({
+  orderId: 'order_98765',
+  total: 249.97,
+  items: 3,
+  currency: 'USD',
+  paymentMethod: 'credit_card'
+});</code></pre>
+
+                <h3>Abandoned Cart</h3>
+                <pre><code>// Call when user leaves checkout
+window.snapitAnalytics.trackAbandonedCart({
+  items: 3,
+  total: 249.97,
+  currency: 'USD'
+});</code></pre>
+
+                <h2 id="conversion-tracking">Conversion Tracking</h2>
+                <p>Track goal completions and conversions:</p>
+
+                <pre><code>// Newsletter signup
+window.snapitAnalytics.trackConversion('newsletter_signup');
+
+// Lead generation with value
+window.snapitAnalytics.trackConversion('lead_generated', 50);
+
+// Trial started
+window.snapitAnalytics.trackConversion('trial_started', 29.99);</code></pre>
+
+                <h2 id="api-endpoints">REST API Reference</h2>
+                <p>All API requests should be sent to: <code>https://api.snapitanalytics.com</code></p>
+
+                <h3>Authentication</h3>
+                <p>Most endpoints require authentication using a JWT token in the Authorization header:</p>
+                <pre><code>Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+                <h3 id="rest-api">Available Endpoints</h3>
+
+                <h4><span class="method-badge method-post">POST</span> /auth/google</h4>
+                <p><strong>Purpose:</strong> Authenticate with Google OAuth</p>
+                <p><strong>Request Body:</strong></p>
+                <pre><code>{
+  "credential": "google_jwt_token"
+}</code></pre>
+                <p><strong>Response:</strong></p>
+                <pre><code>{
+  "token": "your_jwt_token",
+  "user": {
+    "userId": "user_123",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "plan": "free",
+    "limits": { "events": 10000, "projects": 3 }
+  }
+}</code></pre>
+
+                <h4><span class="method-badge method-post">POST</span> /track</h4>
+                <p><strong>Purpose:</strong> Track a single analytics event</p>
+                <p><strong>Authentication:</strong> Tracking code (no JWT required)</p>
+                <p><strong>Request Body:</strong></p>
+                <pre><code>{
+  "projectId": "proj_123",
+  "trackingCode": "trk_xyz",
+  "event": "page_view",
+  "properties": {
+    "title": "Home Page",
+    "sessionId": "sess_abc",
+    "visitorId": "vis_def"
+  },
+  "url": "https://example.com",
+  "timestamp": 1697123456789
+}</code></pre>
+
+                <h4><span class="method-badge method-post">POST</span> /track/batch</h4>
+                <p><strong>Purpose:</strong> Track multiple events in one request (more efficient)</p>
+                <p><strong>Request Body:</strong></p>
+                <pre><code>{
+  "projectId": "proj_123",
+  "trackingCode": "trk_xyz",
+  "events": [
+    { "event": "page_view", "url": "https://example.com", "timestamp": 1697123456789 },
+    { "event": "click", "url": "https://example.com", "timestamp": 1697123456790 }
+  ]
+}</code></pre>
+
+                <h4><span class="method-badge method-get">GET</span> /analytics/{projectId}</h4>
+                <p><strong>Purpose:</strong> Get analytics data for a project</p>
+                <p><strong>Authentication:</strong> Required (JWT)</p>
+                <p><strong>Query Parameters:</strong></p>
+                <ul>
+                    <li><code>timeRange</code>: 7d, 30d, 90d (default: 7d)</li>
+                </ul>
+                <p><strong>Response:</strong></p>
+                <pre><code>{
+  "analytics": {
+    "totalEvents": 15432,
+    "pageViews": 8765,
+    "uniqueVisitors": 2341,
+    "uniqueUrls": 45,
+    "avgVisitDuration": 180,
+    "bounceRate": 42,
+    "topPages": [...],
+    "topReferrers": [...],
+    "browsers": {...},
+    "scrollDepth": {...},
+    "topClickedElements": [...]
+  }
+}</code></pre>
+
+                <h4><span class="method-badge method-get">GET</span> /analytics/heatmap</h4>
+                <p><strong>Purpose:</strong> Get click heatmap data</p>
+                <p><strong>Authentication:</strong> Required (JWT)</p>
+                <p><strong>Query Parameters:</strong></p>
+                <ul>
+                    <li><code>projectId</code>: Your project ID (required)</li>
+                    <li><code>url</code>: Filter by specific URL (optional)</li>
+                </ul>
+                <p><strong>Response:</strong></p>
+                <pre><code>{
+  "projectId": "proj_123",
+  "url": "https://example.com",
+  "clickCount": 1543,
+  "heatmapData": [
+    {
+      "x": 50.5,
+      "y": 25.3,
+      "element": "button",
+      "url": "https://example.com",
+      "timestamp": 1697123456789
+    }
+  ]
+}</code></pre>
+
+                <h4><span class="method-badge method-post">POST</span> /projects</h4>
+                <p><strong>Purpose:</strong> Create a new project</p>
+                <p><strong>Authentication:</strong> Required (JWT)</p>
+                <p><strong>Request Body:</strong></p>
+                <pre><code>{
+  "name": "My Website",
+  "domain": "example.com"
+}</code></pre>
+
+                <h4><span class="method-badge method-get">GET</span> /projects</h4>
+                <p><strong>Purpose:</strong> List all your projects</p>
+                <p><strong>Authentication:</strong> Required (JWT)</p>
+
+                <h4><span class="method-badge method-get">GET</span> /projects/{projectId}/tracking-code</h4>
+                <p><strong>Purpose:</strong> Get the tracking code snippet for a project</p>
+                <p><strong>Authentication:</strong> Required (JWT)</p>
+
+                <h2 id="examples">Integration Examples</h2>
+
+                <h3>React / Next.js</h3>
+                <pre><code>// Add to _app.js or layout.js
+useEffect(() => {
+  // Track route changes
+  const handleRouteChange = () => {
+    window.snapitAnalytics?.trackPageView();
+  };
+
+  router.events.on('routeChangeComplete', handleRouteChange);
+  return () => {
+    router.events.off('routeChangeComplete', handleRouteChange);
+  };
+}, [router.events]);</code></pre>
+
+                <h3>Vue.js</h3>
+                <pre><code>// Add to main.js or router
+router.afterEach(() => {
+  window.snapitAnalytics?.trackPageView();
+});</code></pre>
+
+                <h3>WordPress</h3>
+                <p>Add the tracking code to your theme's <code>header.php</code> file, or use a plugin like "Insert Headers and Footers".</p>
+
+                <h3>Shopify</h3>
+                <p>Go to Online Store → Themes → Actions → Edit Code → theme.liquid, and paste the tracking code before <code>&lt;/head&gt;</code>.</p>
+
+                <div class="warning-box">
+                    <strong>Rate Limiting:</strong> Free tier users can fetch analytics data once every 24 hours. Paid plans have higher limits.
+                </div>
+
+                <h2>Support & Resources</h2>
+                <ul>
+                    <li><a href="/">Dashboard</a> - View your analytics</li>
+                    <li><a href="/privacy">Privacy Policy</a> - How we handle data</li>
+                    <li><a href="/terms">Terms of Service</a> - Legal terms</li>
+                    <li>Email: <a href="mailto:support@snapitsoftware.com">support@snapitsoftware.com</a></li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 3rem;">
+                    <strong>Questions?</strong> Need help with implementation? Contact us at <a href="mailto:support@snapitsoftware.com">support@snapitsoftware.com</a>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
